@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.wallet-adapter-button {
+  @apply px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200 !important;
+}
+
+.wallet-adapter-button-trigger {
+  @apply bg-gradient-to-r from-defi-primary to-defi-secondary !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  @apply bg-defi-dark-light !important;
+}
+
+.wallet-adapter-modal-button-close {
+  @apply bg-defi-dark-light !important;
+}
+
+.wallet-adapter-modal-title {
+  @apply text-white !important;
+}
+
+.wallet-adapter-modal-content {
+  @apply text-defi-gray-light !important;
+}
+
+.wallet-adapter-modal-list-more {
+  @apply bg-defi-dark hover:opacity-80 !important;
+}
+
+.wallet-adapter-dropdown-list {
+  @apply bg-defi-dark-light !important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  @apply text-white hover:bg-defi-dark !important;
+}
