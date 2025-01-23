@@ -133,7 +133,7 @@ export const CUSTOM_TOKEN_IMAGES: Record<string, string> = {
 export const loadTokenImage = async (
   metadata: any,
   basicTokenInfo: any,
-  tokenPrices: any
+  tokenPrices: Record<string, number>
 ) => {
   let logoURI = metadata?.uri;
   
