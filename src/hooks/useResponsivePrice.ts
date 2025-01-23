@@ -36,44 +36,44 @@ export const useResponsivePrice = (price: number | undefined | null) => {
   };
 
   // Smart rounding logic based on price magnitude
-  const smartRound = (value: number | undefined | null): PriceResult => {
-    if (value === undefined || value === null)
-      return { type: "regular", value: "0" };
+//   const smartRound = (value: number | undefined | null): PriceResult => {
+//     if (value === undefined || value === null)
+//       return { type: "regular", value: "0" };
 
-    const num = Number(value);
-    if (isNaN(num)) return { type: "regular", value: "0" };
+//     const num = Number(value);
+//     if (isNaN(num)) return { type: "regular", value: "0" };
 
-    // For very small numbers (less than 0.01)
-    if (num < 0.01 && num > 0) {
-      const numStr = num.toFixed(10);
-      const zeroCount = (numStr.match(/^0\.0*/)?.[0]?.length ?? 2) - 2;
+//     // For very small numbers (less than 0.01)
+//     if (num < 0.01 && num > 0) {
+//       const numStr = num.toFixed(10);
+//       const zeroCount = (numStr.match(/^0\.0*/)?.[0]?.length ?? 2) - 2;
 
-      if (zeroCount >= 2) {
-        const significantDigits = numStr.slice(zeroCount + 2, zeroCount + 4);
-        return {
-          type: "small",
-          value: "0.0",
-          zeros: zeroCount,
-          significantDigits,
-        };
-      }
-    }
+//       if (zeroCount >= 2) {
+//         const significantDigits = numStr.slice(zeroCount + 2, zeroCount + 4);
+//         return {
+//           type: "small",
+//           value: "0.0",
+//           zeros: zeroCount,
+//           significantDigits,
+//         };
+//       }
+//     }
 
-    // For regular numbers
-    if (num >= 1000000)
-      return { type: "regular", value: (num / 1000000).toFixed(2) + "M" };
-    if (num >= 1000)
-      return { type: "regular", value: (num / 1000).toFixed(2) + "K" };
-    if (num >= 1) return { type: "regular", value: num.toFixed(2) };
-    if (num >= 0.01) return { type: "regular", value: num.toFixed(4) };
+//     // For regular numbers
+//     if (num >= 1000000)
+//       return { type: "regular", value: (num / 1000000).toFixed(2) + "M" };
+//     if (num >= 1000)
+//       return { type: "regular", value: (num / 1000).toFixed(2) + "K" };
+//     if (num >= 1) return { type: "regular", value: num.toFixed(2) };
+//     if (num >= 0.01) return { type: "regular", value: num.toFixed(4) };
 
-    return { type: "regular", value: num.toFixed(4) };
-  };
+//     return { type: "regular", value: num.toFixed(4) };
+//   };
 
-  // Apply smart rounding to the price
-  const result = smartRound(price);
+//   // Apply smart rounding to the price
+//   const result = smartRound(price);
 
-  console.log("smartRound Price:", result);
+ 
 
   // Use decimals in your price formatting logic
   const formattedPrice =

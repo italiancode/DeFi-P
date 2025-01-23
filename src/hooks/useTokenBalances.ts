@@ -149,13 +149,13 @@ export const useTokenBalances = () => {
         break; // Exit loop if successful
       } catch (error: unknown) {
         if (error instanceof Error) {
+          console.error("Error fetching balances:", error.message); // Log the error message
           if ((error as any).response?.status === 429) {
             attempts++;
             const delay = Math.min(500 * attempts, 5000); // Exponential backoff
             console.warn(`Rate limit exceeded. Retrying in ${delay}ms...`);
             await new Promise(resolve => setTimeout(resolve, delay));
           } else {
-            console.error("Error fetching balances:", error);
             setError("Failed to fetch balances. Please check your API key and connection.");
           }
         } else {
