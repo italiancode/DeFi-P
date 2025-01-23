@@ -7,6 +7,14 @@ import { TokenInfo } from '@/types'
 import { useResponsivePrice } from '@/hooks/useResponsivePrice'
 import { cn } from '@/lib/utils'
 
+// Define the type for formattedPrice
+interface FormattedPrice {
+    type: 'small' | 'large'; // Adjust based on your requirements
+    zeros: number;
+    significantDigits: string; // or number, depending on your use case
+    value: string; // or number, depending on your use case
+}
+
 const getPnLColor = (value: number) => {
     if (value > 10) return 'text-emerald-400'
     if (value > 0) return 'text-emerald-500'
@@ -15,7 +23,8 @@ const getPnLColor = (value: number) => {
 }
 
 export default function Component({ token }: { token: TokenInfo }) {
-    const formattedPrice = useResponsivePrice(token.price || 0)
+    // Ensure formattedPrice is of type FormattedPrice
+    const formattedPrice: FormattedPrice = useResponsivePrice(token.price || 0) as unknown as FormattedPrice;
     const isProfitable = (token.profitLossPercentage || 0) > 0
 
     const copyMintAddress = () => {
