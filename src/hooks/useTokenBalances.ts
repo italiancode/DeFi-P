@@ -45,102 +45,121 @@ export const useTokenBalances = () => {
     setLoading(true);
     setError(null);
 
-    try {
-      // Phase 1: Get basic token info and prices first
-      const tokenAccounts = await withRetry(() =>
-        connection.getParsedTokenAccountsByOwner(publicKey, {
-          programId: SPL_TOKEN_PROGRAM_ID,
-        })
-      );
+    let attempts = 0;
+    const maxAttempts = 5;
 
-      const solBalance = await withRetry(() =>
-        connection.getBalance(publicKey)
-      );
+    while (attempts < maxAttempts) {
+      try {
+        // Phase 1: Get basic token info and prices first
+        const tokenAccounts = await withRetry(() =>
+          connection.getParsedTokenAccountsByOwner(publicKey, {
+            programId: SPL_TOKEN_PROGRAM_ID,
+          })
+        );
 
-      // Collect all token mints first for batch price fetching
-      const mints = tokenAccounts.value
-        .map((account) => account.account.data.parsed.info.mint)
-        .filter((mint) => mint); // Filter out any null/undefined
+        const solBalance = await withRetry(() =>
+          connection.getBalance(publicKey)
+        );
 
-      // Fetch all prices in one go
-      const allTokenPrices = await fetchTokenPrices([
-        WRAPPED_SOL_MINT,
-        ...mints,
-      ]);
+        // Collect all token mints first for batch price fetching
+        const mints = tokenAccounts.value
+          .map((account) => account.account.data.parsed.info.mint)
+          .filter((mint) => mint); // Filter out any null/undefined
 
-      // Add SOL balance first
-      const solToken: TokenBalance = {
-        mint: "SOL",
-        symbol: "SOL",
-        name: "Solana",
-        amount: solBalance,
-        decimals: 9,
-        uiAmount: solBalance / LAMPORTS_PER_SOL,
-        logoURI: SOL_LOGO_URI,
-        price: allTokenPrices[WRAPPED_SOL_MINT] || 0,
-        usdValue:
-          (solBalance / LAMPORTS_PER_SOL) *
-          (allTokenPrices[WRAPPED_SOL_MINT] || 0),
-      };
-      updateBalance(solToken);
+        // Fetch all prices in one go
+        const allTokenPrices = await fetchTokenPrices([
+          WRAPPED_SOL_MINT,
+          ...mints,
+        ]);
 
-      // Phase 1: Add basic token info with prices
-      for (const account of tokenAccounts.value) {
-        const info = account.account.data.parsed.info;
-        if (info.tokenAmount.uiAmount > 0) {
-          const price = allTokenPrices[info.mint] || 0;
-          const basicTokenInfo: TokenBalance = {
-            mint: info.mint,
-            symbol: "Loading...",
-            name: "Loading...",
-            amount: info.tokenAmount.amount,
-            decimals: info.tokenAmount.decimals,
-            uiAmount: info.tokenAmount.uiAmount,
-            logoURI: generateTokenSymbolImage("..."),
-            price,
-            usdValue: info.tokenAmount.uiAmount * price,
-          };
-          updateBalance(basicTokenInfo);
-        }
-      }
+        // Add SOL balance first
+        const solToken: TokenBalance = {
+          mint: "SOL",
+          symbol: "SOL",
+          name: "Solana",
+          amount: solBalance,
+          decimals: 9,
+          uiAmount: solBalance / LAMPORTS_PER_SOL,
+          logoURI: SOL_LOGO_URI,
+          price: allTokenPrices[WRAPPED_SOL_MINT] || 0,
+          usdValue:
+            (solBalance / LAMPORTS_PER_SOL) *
+            (allTokenPrices[WRAPPED_SOL_MINT] || 0),
+        };
+        updateBalance(solToken);
 
-      setLoading(false);
-
-      // Phase 2: Fetch metadata and images
-      for (const account of tokenAccounts.value) {
-        const info = account.account.data.parsed.info;
-        if (info.tokenAmount.uiAmount > 0) {
-          try {
-            const metadata = await withRetry(() =>
-              getMetadata(new PublicKey(info.mint), connection)
-            );
-
-            const basicTokenInfo = {
+        // Phase 1: Add basic token info with prices
+        for (const account of tokenAccounts.value) {
+          const info = account.account.data.parsed.info;
+          if (info.tokenAmount.uiAmount > 0) {
+            const price = allTokenPrices[info.mint] || 0;
+            const basicTokenInfo: TokenBalance = {
               mint: info.mint,
-              tokenAmount: info.tokenAmount,
+              symbol: "Loading...",
+              name: "Loading...",
+              amount: info.tokenAmount.amount,
+              decimals: info.tokenAmount.decimals,
               uiAmount: info.tokenAmount.uiAmount,
+              logoURI: generateTokenSymbolImage("..."),
+              price,
+              usdValue: info.tokenAmount.uiAmount * price,
             };
-
-            const updatedToken = await loadTokenImage(
-              metadata,
-              basicTokenInfo,
-              allTokenPrices
-            );
-
-            updateBalance(updatedToken);
-          } catch (error) {
-            console.error(
-              `Error fetching metadata for token ${info.mint}:`,
-              error
-            );
+            updateBalance(basicTokenInfo);
           }
         }
+
+        setLoading(false);
+
+        // Phase 2: Fetch metadata and images
+        for (const account of tokenAccounts.value) {
+          const info = account.account.data.parsed.info;
+          if (info.tokenAmount.uiAmount > 0) {
+            try {
+              const metadata = await withRetry(() =>
+                getMetadata(new PublicKey(info.mint), connection)
+              );
+
+              const basicTokenInfo = {
+                mint: info.mint,
+                tokenAmount: info.tokenAmount,
+                uiAmount: info.tokenAmount.uiAmount,
+              };
+
+              const updatedToken = await loadTokenImage(
+                metadata,
+                basicTokenInfo,
+                allTokenPrices
+              );
+
+              updateBalance(updatedToken);
+            } catch (error) {
+              console.error(
+                `Error fetching metadata for token ${info.mint}:`,
+                error
+              );
+            }
+          }
+        }
+        break; // Exit loop if successful
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if ((error as any).response?.status === 429) {
+            attempts++;
+            const delay = Math.min(500 * attempts, 5000); // Exponential backoff
+            console.warn(`Rate limit exceeded. Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          } else {
+            console.error("Error fetching balances:", error);
+            setError("Failed to fetch balances. Please check your API key and connection.");
+          }
+        } else {
+          console.error("Unexpected error:", error);
+          setError("An unexpected error occurred.");
+        }
+        break; // Exit loop on other errors
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching balances:", error);
-      setError("Failed to fetch balances");
-    } finally {
-      setLoading(false);
     }
   }, [connection, publicKey]);
 

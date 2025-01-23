@@ -9,10 +9,10 @@ import { Commitment } from '@solana/web3.js';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 // Construct RPC URL from environment variables
-const MAINNET_RPC_URL = `${process.env.NEXT_PUBLIC_NODE_RPC_URL}/${process.env.NEXT_PUBLIC_NODE_API_KEY}`;
+const MAINNET_RPC_URL = `${process.env.NEXT_PUBLIC_NODE_RPC_URL}${process.env.NEXT_PUBLIC_NODE_API_KEY}`;
 
 if (!process.env.NEXT_PUBLIC_NODE_API_KEY) {
-  console.warn('Missing Helius API key in environment variables');
+  console.warn('Missing API key in environment variables');
 }
 
 const connectionConfig = {

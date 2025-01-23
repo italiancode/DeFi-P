@@ -7,6 +7,8 @@ import ClientOnly from "../ClientOnly";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 
+import Image from "next/image";
+
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -18,6 +20,13 @@ export const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
+              <Image
+                src="/defip-logo.png"
+                alt="DeFiP Logo"
+                className="h-8 w-8"
+                width={32}
+                height={32}
+              />
               <span className="text-2xl font-bold bg-gradient-to-r from-defi-primary to-defi-secondary bg-clip-text text-transparent">
                 DeFiP
               </span>

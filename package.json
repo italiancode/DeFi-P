@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "git-commit-push": "git diff-index --quiet HEAD || (git add . && git commit -m \"Something just got updated!\" && git push origin main)",
+    "git-commit-push-force": "git add . && git commit -m \"Something just got updated!\" --no-verify && git push origin main --force"
   },
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
@@ -51,5 +53,8 @@
   },
   "resolutions": {
     "bn.js": "^5.2.1"
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }
