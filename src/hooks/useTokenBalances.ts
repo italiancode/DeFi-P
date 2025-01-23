@@ -150,11 +150,14 @@ export const useTokenBalances = () => {
 
               // Update balance with the corrected token
               updateBalance(tokenToUpdate);
-            } catch (error) {
-              console.error(
-                `Error fetching metadata for token ${info.mint}:`,
-                error
-              );
+            } catch (error: unknown) {
+              if (error instanceof Error) {
+                console.error("Error fetching metadata for token:", error.message);
+                setError("Failed to fetch metadata. Please check your API key and connection.");
+              } else {
+                console.error("Unexpected error:", error);
+                setError("An unexpected error occurred.");
+              }
             }
           }
         }
