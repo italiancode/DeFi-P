@@ -71,7 +71,9 @@ export const useResponsivePrice = (price: number | undefined | null) => {
     const result = smartRound(price);
 
     // Use decimals in your price formatting logic
-    const formattedPrice = price ? price.toFixed(decimals) : '0.00';
+    const formattedPrice = (typeof price === 'number' || (typeof price === 'string' && !isNaN(Number(price)))) 
+        ? Number(price).toFixed(decimals) 
+        : '0.00';
 
     return formattedPrice;
 };
