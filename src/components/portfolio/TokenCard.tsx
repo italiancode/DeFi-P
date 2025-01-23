@@ -1,6 +1,6 @@
 'use client';
 
-import { TokenBalance } from '@/hooks/useTokenBalances';
+import { TokenBalance } from '@/types/token';
 
 interface TokenCardProps {
   token: TokenBalance;
