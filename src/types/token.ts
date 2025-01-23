@@ -22,8 +22,8 @@ export interface TokenBalance {
   usdValue: number;
 }
 
-interface TokenMetadata {
-  symbol: string;
-  name: string;
-  logoURI?: string | null;
-} 
+// interface TokenMetadata {
+//   symbol: string;
+//   name: string;
+//   logoURI?: string | null;
+// } 

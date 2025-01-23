@@ -53,7 +53,7 @@ const getBackoffDelay = (attempt: number) => {
 };
 
 // Add rate limiting and caching logic
-const RATE_LIMIT_DELAY = 2000; // 2 seconds
+// const RATE_LIMIT_DELAY = 2000; // 2 seconds
 
 // Cache for metadata requests
 const metadataCache = new Map<string, any>();

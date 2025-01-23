@@ -53,8 +53,5 @@
   },
   "resolutions": {
     "bn.js": "^5.2.1"
-  },
-  "rules": {
-    "@typescript-eslint/no-unused-vars": "off"
   }
 }

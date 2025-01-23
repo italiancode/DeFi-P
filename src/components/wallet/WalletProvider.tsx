@@ -5,8 +5,7 @@ import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
 import { Commitment } from '@solana/web3.js';
-
-require('@solana/wallet-adapter-react-ui/styles.css');
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 // Construct RPC URL from environment variables
 const MAINNET_RPC_URL = `${process.env.NEXT_PUBLIC_NODE_RPC_URL}${process.env.NEXT_PUBLIC_NODE_API_KEY}`;

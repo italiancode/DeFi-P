@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
-import ClientOnly from '@/components/ClientOnly';
-import { WalletContextProvider } from '@/components/wallet/WalletProvider';
-import { ConnectButton } from '@/components/wallet/ConnectButton';
-import { Navbar } from '@/components/common/Navbar';
-import { Toaster } from 'react-hot-toast';
+import ClientOnly from "@/components/ClientOnly";
+import { WalletContextProvider } from "@/components/wallet/WalletProvider";
+
+import { Navbar } from "@/components/common/Navbar";
+import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "./providers";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// const geistSans = localFont({
+//   src: "./fonts/GeistVF.woff",
+//   variable: "--font-geist-sans",
+//   weight: "100 900",
+// });
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -42,9 +42,7 @@ export default function RootLayout({
             <WalletContextProvider>
               <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-defi-dark dark:to-defi-dark-light text-gray-900 dark:text-defi-gray-light">
                 <Navbar />
-                <main className="container mx-auto py-8 px-4">
-                  {children}
-                </main>
+                <main className="container mx-auto py-8 px-4">{children}</main>
               </div>
             </WalletContextProvider>
             <Toaster position="bottom-right" />

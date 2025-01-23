@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useResponsivePrice = (price: number | undefined | null) => {
     const [decimals, setDecimals] = useState(2);
@@ -68,5 +68,10 @@ export const useResponsivePrice = (price: number | undefined | null) => {
     };
 
     // Apply smart rounding to the price
-    return smartRound(price);
+    const result = smartRound(price);
+
+    // Use decimals in your price formatting logic
+    const formattedPrice = price ? price.toFixed(decimals) : '0.00';
+
+    return formattedPrice;
 };

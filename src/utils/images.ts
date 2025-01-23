@@ -25,7 +25,7 @@ const FAILED_URI_CACHE = new Set<string>();
 
 // Add similar caching for images
 const imageCache = new Map<string, string>();
-const failedImageRequests = new Set<string>();
+// const failedImageRequests = new Set<string>();
 
 export const fetchMetadataImage = async (
   uri: string | null,

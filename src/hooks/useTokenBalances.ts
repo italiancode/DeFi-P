@@ -17,6 +17,12 @@ import { withRetry } from "../utils/retry";
 
 const WRAPPED_SOL_MINT = "So11111111111111111111111111111111111111112";
 
+// type TokenData = {
+//     mint: string;
+//     amount: number;
+//     // Add other properties as needed
+// };
+
 export const useTokenBalances = () => {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
