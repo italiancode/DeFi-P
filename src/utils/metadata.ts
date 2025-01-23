@@ -69,7 +69,7 @@ const getBackoffDelay = (attempt: number) => {
 // Main function to fetch metadata
 export const getMetadata = async (
   mint: PublicKey,
-  connection: any
+  connection: any // Change 'any' to a more specific type if possible
 ): Promise<TokenMetadata | null> => {
   const mintAddress = mint.toBase58();
 
@@ -100,7 +100,7 @@ export const getMetadata = async (
       try {
         const metadataAccount = await connection.getAccountInfo(
           metadataAddress
-        );
+        ); // Change 'any' to a more specific type if possible
         if (!metadataAccount) {
           FAILED_METADATA_CACHE.add(mintAddress);
           return null;

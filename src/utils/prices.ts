@@ -1,18 +1,34 @@
 import axios from 'axios';
 
+interface JupiterData {
+  price: number;
+  // Add other fields if necessary
+}
+
 export async function fetchTokenPrices(mints: string[]): Promise<{ [key: string]: number }> {
   const prices: { [key: string]: number } = {};
 
   try {
     const jupiterResponse = await axios.get('https://api.jup.ag/price/v2', { params: { ids: mints.join(',') } });
-    Object.entries(jupiterResponse.data.data || {}).forEach(([mint, data]: [string, any]) => {
+    const dataEntries = jupiterResponse.data.data as Record<string, JupiterData>;
+    Object.entries(dataEntries || {}).forEach(([mint, data]) => {
       const price = (data?.price) || 0;
       if (price > 0) {
         prices[mint] = price;
       }
     });
   } catch (error) {
-    console.error('Error fetching prices from Jupiter:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error:', error.message);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      } else if (error.request) {
+        console.error('Request made but no response received:', error.request);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
   }
 
   const remainingMints = mints.filter(mint => !prices[mint]);
