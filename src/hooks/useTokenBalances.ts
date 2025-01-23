@@ -165,7 +165,9 @@ export const useTokenBalances = () => {
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching balances:", error.message); // Log the error message
-          if ((error as any).response?.status === 429) {
+        } else if (typeof error === 'object' && error !== null && 'response' in error) {
+          const errorResponse = error as { response?: { status?: number } };
+          if (errorResponse.response?.status === 429) {
             attempts++;
             const delay = Math.min(500 * attempts, 5000); // Exponential backoff
             console.warn(`Rate limit exceeded. Retrying in ${delay}ms...`);
@@ -173,9 +175,6 @@ export const useTokenBalances = () => {
           } else {
             setError("Failed to fetch balances. Please check your API key and connection.");
           }
-        } else if (typeof error === 'object' && error !== null && 'message' in error) {
-          console.error("Unexpected error:", error);
-          setError("An unexpected error occurred.");
         } else {
           console.error("Unexpected error:", error);
           setError("An unexpected error occurred.");
