@@ -125,6 +125,11 @@ export const useTokenBalances = () => {
                 getMetadata(new PublicKey(info.mint), connection)
               );
 
+              if (!metadata) {
+                console.error(`No metadata found for token ${info.mint}`);
+                return; // Handle the case where metadata is null
+              }
+
               const basicTokenInfo = {
                 mint: info.mint,
                 tokenAmount: info.tokenAmount,
@@ -137,7 +142,14 @@ export const useTokenBalances = () => {
                 allTokenPrices
               );
 
-              updateBalance(updatedToken);
+              // Ensure amount is a number
+              const tokenToUpdate: TokenBalance = {
+                ...updatedToken,
+                amount: parseFloat(updatedToken.amount), // Convert amount to number
+              };
+
+              // Update balance with the corrected token
+              updateBalance(tokenToUpdate);
             } catch (error) {
               console.error(
                 `Error fetching metadata for token ${info.mint}:`,

@@ -129,10 +129,30 @@ export const CUSTOM_TOKEN_IMAGES: Record<string, string> = {
   USDC: "https://cryptologos.cc/logos/usd-coin-usdc-logo.png?v=035",
 };
 
-// Add new function to handle token image loading
+// Define appropriate types for metadata and basicTokenInfo
+interface MetadataType {
+  uri?: string;
+  symbol?: string;
+  name?: string;
+  data?: {
+    uri?: string;
+    symbol?: string;
+    name?: string;
+  };
+}
+
+interface BasicTokenInfoType {
+  mint: string;
+  tokenAmount: {
+    amount: string;
+    decimals: number;
+  };
+  uiAmount: number;
+}
+
 export const loadTokenImage = async (
-  metadata: any,
-  basicTokenInfo: any,
+  metadata: MetadataType, // Updated type
+  basicTokenInfo: BasicTokenInfoType, // Updated type
   tokenPrices: Record<string, number>
 ) => {
   let logoURI = metadata?.uri;

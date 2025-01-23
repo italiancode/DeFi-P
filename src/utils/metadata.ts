@@ -1,5 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { getMetadataAccountDataSerializer } from "@metaplex-foundation/mpl-token-metadata";
+import { Connection } from "@solana/web3.js";
 
 // Constants
 export const METADATA_PROGRAM_ID = new PublicKey(
@@ -69,7 +70,7 @@ const getBackoffDelay = (attempt: number) => {
 // Main function to fetch metadata
 export const getMetadata = async (
   mint: PublicKey,
-  connection: any // Change 'any' to a more specific type if possible
+  connection: Connection // Change 'any' to a more specific type, e.g., Connection
 ): Promise<TokenMetadata | null> => {
   const mintAddress = mint.toBase58();
 
