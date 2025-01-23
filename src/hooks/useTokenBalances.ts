@@ -158,6 +158,9 @@ export const useTokenBalances = () => {
           } else {
             setError("Failed to fetch balances. Please check your API key and connection.");
           }
+        } else if (typeof error === 'object' && error !== null && 'message' in error) {
+          console.error("Unexpected error:", error);
+          setError("An unexpected error occurred.");
         } else {
           console.error("Unexpected error:", error);
           setError("An unexpected error occurred.");

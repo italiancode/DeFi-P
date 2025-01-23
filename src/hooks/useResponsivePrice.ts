@@ -27,13 +27,13 @@ export const useResponsivePrice = (price: number | undefined | null) => {
     };
   }, []);
 
-  // Define a return type for the hook
-  type PriceResult = {
-    type: "regular" | "small";
-    value: string;
-    zeros?: number;
-    significantDigits?: string;
-  };
+//   // Define a return type for the hook
+//   type PriceResult = {
+//     type: "regular" | "small";
+//     value: string;
+//     zeros?: number;
+//     significantDigits?: string;
+//   };
 
   // Smart rounding logic based on price magnitude
 //   const smartRound = (value: number | undefined | null): PriceResult => {
