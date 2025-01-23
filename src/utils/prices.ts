@@ -29,6 +29,7 @@ export async function fetchTokenPrices(mints: string[]): Promise<{ [key: string]
     } else {
       console.error('Unexpected error:', error);
     }
+    throw error; // Rethrow the error after logging
   }
 
   const remainingMints = mints.filter(mint => !prices[mint]);
